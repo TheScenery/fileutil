@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
 )
 
@@ -61,4 +62,50 @@ func Zip(dst, src string) error {
 		return nil
 
 	})
+}
+
+func readZipFile(dst string, file *zip.File) error {
+	fr, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer fr.Close()
+
+	fw, err := os.OpenFile(dst, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, file.Mode())
+	if err != nil {
+		return err
+	}
+	defer fw.Close()
+
+	_, err = io.Copy(fw, fr)
+	return err
+}
+
+func UnZip(dst, src string) error {
+	zr, err := zip.OpenReader(src)
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(dst, os.ModeDir)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range zr.File {
+		fPath := path.Join(dst, file.Name)
+		if file.FileInfo().IsDir() {
+			if err := os.MkdirAll(fPath, os.ModeDir); err != nil {
+				return err
+			}
+			continue
+		}
+
+		err := readZipFile(fPath, file)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
