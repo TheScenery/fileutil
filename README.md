@@ -9,11 +9,11 @@ go get -u https://github.com/TheScenery/file_util
 ### Zip
 Zip a file or dir use zip method
 ```go
-    fileutil.Zip("xxx.zip", "srcDir")
+fileutil.Zip("xxx.zip", "srcDir")
 ```
 
 ### UnZip
 Un zip a file
 ```go
-    fileutil.UnZip("dstDir", "xxx.zip")
+fileutil.UnZip("dstDir", "xxx.zip")
 ```
