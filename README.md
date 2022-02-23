@@ -3,7 +3,7 @@ Go lang file operation helper methods
 
 # How to use?
 ```
-go get -u https://github.com/TheScenery/file_util
+go get -u https://github.com/TheScenery/fileutil
 ```
 
 ### Zip
